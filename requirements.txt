@@ -1,0 +1,4 @@
+flask
+transformers==4.30.2
+torch==2.7.1
+pandas

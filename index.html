@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>QA System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+    }
+    .jawaban {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sistem Question Answering</h1>
+  <form id="qaForm">
+    <label>Pertanyaan:</label><br>
+    <input type="text" id="question" required><br>
+    
+    <label>Konteks (boleh kosong, akan dicari otomatis):</label><br>
+    <textarea id="context" rows="5"></textarea><br>
+    
+    <button type="submit">Tanya</button>
+  </form>
+
+  <div class="jawaban" id="answerBox"></div>
+
+  <script>
+    const form = document.getElementById('qaForm');
+    const answerBox = document.getElementById('answerBox');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const question = document.getElementById('question').value;
+      const context = document.getElementById('context').value;
+
+      const response = await fetch('/qa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, context })
+      });
+
+      const result = await response.json();
+      answerBox.textContent = result.answer || result.error || 'Gagal mendapatkan jawaban.';
+    });
+  </script>
+</body>
+</html>
